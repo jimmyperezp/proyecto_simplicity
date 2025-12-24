@@ -7,6 +7,13 @@
 *.slps
 *.pintool
 
+# Archivos y carpetas adicionales generados por simplicity studio
+.projectlinkstore
+.uceditor/
+GNU ARM v12.2.1 - Debug/
+config/pin_config.h
+config/pin-config.h
+
 # Archivos del sistema de build Eclipse/CDT
 .cproject
 .project
