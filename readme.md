@@ -1,2 +1,4 @@
-# Empty CPP Example
-This example project shows an empty configuration that can be used as a starting point to add components and functionality.
+# Migración a Simplicity Studio
+
+Este proyecto sirve para el traslado de una librería en C++ funcional adaptándola a las Cookies, desarrolladas en el CEI. 
+El entorno de desarrollo utilizado es SimplicityStudio5. 
