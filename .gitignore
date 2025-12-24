@@ -1,73 +1,51 @@
-###############################
-# Carpetas internas del IDE
-###############################
-.pdm/
+# -----------------------------------------
+# ARCHIVOS QUE DEBEN IGNORARSE (GENERADOS)
+# -----------------------------------------
+
+# Archivos del configurador de Simplicity Studio
+*.slcp
+*.slps
+*.pintool
+
+# Archivos del sistema de build Eclipse/CDT
+.cproject
+.project
 .settings/
-.uceditor/
-.projectlinkstore
 
-###############################
-# Carpetas generadas automáticamente
-###############################
-autogen/
-config/
-GNU ARM v*/
+# Archivos generados al importar proyectos
+imported_project_report.html
 
-###############################
-# Archivos de configuración del IDE
-###############################
-.projectchecksums
-.projectlinkstore
-
-###############################
-# Artefactos de compilación
-###############################
+# Archivos temporales y de build
+build/
+output/
+Debug/
+Release/
 *.o
 *.d
-*.obj
-*.elf
 *.axf
-*.out
-*.bin
-*.hex
+*.elf
 *.map
-*.a
-*.lib
-*.so
-*.dll
-*.dylib
-*.rsp
-*.mk
 
-###############################
-# Archivos temporales y backups
-###############################
-*~
+# Archivos de caché y temporales
 *.tmp
 *.log
 
-###############################
-# SDK externo (no versionar)
-###############################
-gecko_sdk_*/
+# Archivos de backup
+*~
+*.bak
 
-###############################
-# Carpetas de build típicas
-###############################
-build/
-output/
-debug/
-release/
+# -----------------------------------------
+# ARCHIVOS QUE NO DEBEN IGNORARSE (CÓDIGO)
+# -----------------------------------------
 
-###############################
-# Archivos que SÍ debes versionar
-###############################
-!.project
-!.cproject
-!*.slcp
-!*.slps
-!*.pintool
+# Mantener el código fuente
+!src/
+!inc/
 !*.c
-!*.cpp
 !*.h
-!readme*
+!*.cpp
+
+# Mantener archivos de configuración propios
+!README.md
+!LICENSE
+!.gitignore
