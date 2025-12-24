@@ -1,0 +1,73 @@
+###############################
+# Carpetas internas del IDE
+###############################
+.pdm/
+.settings/
+.uceditor/
+.projectlinkstore
+
+###############################
+# Carpetas generadas automáticamente
+###############################
+autogen/
+config/
+GNU ARM v*/
+
+###############################
+# Archivos de configuración del IDE
+###############################
+.projectchecksums
+.projectlinkstore
+
+###############################
+# Artefactos de compilación
+###############################
+*.o
+*.d
+*.obj
+*.elf
+*.axf
+*.out
+*.bin
+*.hex
+*.map
+*.a
+*.lib
+*.so
+*.dll
+*.dylib
+*.rsp
+*.mk
+
+###############################
+# Archivos temporales y backups
+###############################
+*~
+*.tmp
+*.log
+
+###############################
+# SDK externo (no versionar)
+###############################
+gecko_sdk_*/
+
+###############################
+# Carpetas de build típicas
+###############################
+build/
+output/
+debug/
+release/
+
+###############################
+# Archivos que SÍ debes versionar
+###############################
+!.project
+!.cproject
+!*.slcp
+!*.slps
+!*.pintool
+!*.c
+!*.cpp
+!*.h
+!readme*
