@@ -30,10 +30,9 @@ void app_process_action(void)
 {
 }
 
-<<<<<<< HEAD
 //Esto lo añado desde el HP del kit digital
 
 
-=======
 //cambios desde el de sobremesa
->>>>>>> f0dcc7b516f03774e184ea445c3797569a77cdbe
+
+//Te contesto desde el HP
