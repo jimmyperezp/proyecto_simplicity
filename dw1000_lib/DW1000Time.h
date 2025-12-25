@@ -1,19 +1,8 @@
 #ifndef DW1000TIME_H
 #define DW1000TIME_H
 
+#include "cookie_hal.h"
 
-#include <stdint.h>
-#include <inttypes.h>
-#include <stdio.h>
-#include <stdint.h>
-#include <cstring>
-#include <math.h>
-#include "DW1000CompileOptions.h"
-#include "deprecated.h"
-#include "require_cpp11.h"
-
-typedef uint8_t byte;
-typedef bool boolean;
 
 class DW1000Time {
 

@@ -97,12 +97,9 @@ void DW1000Class::select(uint8_t ss) {
 	// try locking clock at PLL speed (should be done already,
 	// but just to be sure)
 	enableClock(AUTO_CLOCK);
-	delay(5);
+	cookie_hal_delay_ms(5);
 	// reset chip (either soft or hard)
-	if(_rst != 0xff) {
-		// dw1000 data sheet v2.08 §5.6.1 page 20, the RSTn pin should not be driven high but left floating.
-		pinMode(_rst, INPUT);
-	}
+
 	reset();
 	// default network and node id
 	writeValueToBytes(_networkAndAddress, 0xFF, LEN_PANADR);
@@ -117,11 +114,11 @@ void DW1000Class::select(uint8_t ss) {
 	writeSystemEventMaskRegister();
 	// load LDE micro-code
 	enableClock(XTI_CLOCK);
-	delay(5);
+	cookie_hal_delay_ms(5);
 	manageLDE();
-	delay(5);
+	cookie_hal_delay_ms(5);
 	enableClock(AUTO_CLOCK);
-	delay(5);
+	cookie_hal_delay_ms(5);
 	
 	// read the temp and vbat readings from OTP that were recorded during production test
 	// see 6.3.1 OTP memory map
@@ -134,11 +131,23 @@ void DW1000Class::select(uint8_t ss) {
 
 void DW1000Class::reselect(uint8_t ss) {
 	_ss = ss;
+	/*
 	pinMode(_ss, OUTPUT);
 	digitalWrite(_ss, HIGH);
+	*/
 }
 
 void DW1000Class::begin(uint8_t irq, uint8_t rst) {
+
+  cookie_hal_init();
+
+  _rst = rst;
+  _irq = irq;
+  _deviceMode = IDLE_MODE;
+
+
+
+  /* PREVIOUS VERSION
 	// generous initial init/wake-up-idle delay
 	delay(5);
 	// Configure the IRQ pin as INPUT. Required for correct interrupt setting for ESP8266
@@ -156,6 +165,8 @@ void DW1000Class::begin(uint8_t irq, uint8_t rst) {
 	//attachInterrupt(_irq, DW1000Class::handleInterrupt, CHANGE); // todo interrupt for ESP8266
 	// TODO throw error if pin is not a interrupt pin
 	attachInterrupt(digitalPinToInterrupt(_irq), DW1000Class::handleInterrupt, RISING); // todo interrupt for ESP8266
+  */
+
 }
 
 void DW1000Class::manageLDE() {
@@ -179,7 +190,7 @@ void DW1000Class::manageLDE() {
 	otpctrl[1]   = 0x80;
 	writeBytes(PMSC, PMSC_CTRL0_SUB, pmscctrl0, 2);
 	writeBytes(OTP_IF, OTP_CTRL_SUB, otpctrl, 2);
-	delay(5);
+	cookie_hal_delay_ms(5);
 	pmscctrl0[0] = 0x00;
 	pmscctrl0[1] &= 0x02;
 	writeBytes(PMSC, PMSC_CTRL0_SUB, pmscctrl0, 2);
@@ -269,9 +280,17 @@ void DW1000Class::deepSleep() {
 }
 
 void DW1000Class::spiWakeup(){
-        digitalWrite(_ss, LOW);
-        delay(2);
-        digitalWrite(_ss, HIGH);
+
+        //digitalWrite(_ss, LOW);
+
+  cookie_hal_spi_select(true);
+  cookie_hal_delay_ms(2);
+
+
+        //digitalWrite(_ss, HIGH);
+  cookie_hal_spi_select(false);
+
+
         if (_debounceClockEnabled){
                 DW1000Class::enableDebounceClock();
         }
@@ -283,11 +302,11 @@ void DW1000Class::reset() {
 		softReset();
 	} else {
 		// dw1000 data sheet v2.08 §5.6.1 page 20, the RSTn pin should not be driven high but left floating.
-		pinMode(_rst, OUTPUT);
-		digitalWrite(_rst, LOW);
-		delay(2);  // dw1000 data sheet v2.08 §5.6.1 page 20: nominal 50ns, to be safe take more time
-		pinMode(_rst, INPUT);
-		delay(10); // dwm1000 data sheet v1.2 page 5: nominal 3 ms, to be safe take more time
+		//pinMode(_rst, OUTPUT);
+	  //digitalWrite(_rst, LOW);
+	    cookie_hal_delay_ms(2);  // dw1000 data sheet v2.08 §5.6.1 page 20: nominal 50ns, to be safe take more time
+		//pinMode(_rst, INPUT);
+	    cookie_hal_delay_ms(10); // dwm1000 data sheet v1.2 page 5: nominal 3 ms, to be safe take more time
 		// force into idle mode (although it should be already after reset)
 		idle();
 	}
@@ -300,7 +319,7 @@ void DW1000Class::softReset() {
 	writeBytes(PMSC, PMSC_CTRL0_SUB, pmscctrl0, LEN_PMSC_CTRL0);
 	pmscctrl0[3] = 0x00;
 	writeBytes(PMSC, PMSC_CTRL0_SUB, pmscctrl0, LEN_PMSC_CTRL0);
-	delay(10);
+	cookie_hal_delay_ms(10);
 	pmscctrl0[0] = 0x00;
 	pmscctrl0[3] = 0xF0;
 	writeBytes(PMSC, PMSC_CTRL0_SUB, pmscctrl0, LEN_PMSC_CTRL0);
@@ -1666,6 +1685,7 @@ void DW1000Class::readBytes(byte cmd, uint16_t offset, byte data[], uint16_t n) 
 			headerLen += 2;
 		}
 	}
+
 	SPI.beginTransaction(*_currentSPI);
 	digitalWrite(_ss, LOW);
 	for(i = 0; i < headerLen; i++) {
@@ -1674,7 +1694,7 @@ void DW1000Class::readBytes(byte cmd, uint16_t offset, byte data[], uint16_t n) 
 	for(i = 0; i < n; i++) {
 		data[i] = SPI.transfer(JUNK); // read values
 	}
-	delayMicroseconds(5);
+	cookie_hal_delay_us(5);
 	digitalWrite(_ss, HIGH);
 	SPI.endTransaction();
 }
@@ -1747,7 +1767,7 @@ void DW1000Class::writeBytes(byte cmd, uint16_t offset, byte data[], uint16_t da
 	for(i = 0; i < data_size; i++) {
 		SPI.transfer(data[i]); // write values
 	}
-	delayMicroseconds(5);
+	cookie_hal_delay_us(5);
 	digitalWrite(_ss, HIGH);
 	SPI.endTransaction();
 }

@@ -110,7 +110,7 @@ void DW1000RangingClass::generalStart() {
 	// responder starts in receiving mode, awaiting a ranging poll message
 	receiver();
 	// for first time ranging frequency computation
-	_rangingCountPeriod = millis();
+	_rangingCountPeriod = cookie_hal_get_millis();
 }
 
 void DW1000RangingClass::startAsResponder(const char address[], const byte mode[], const bool randomShortAddress, const uint8_t boardType) {
@@ -305,7 +305,7 @@ DW1000Device* DW1000RangingClass::getDistantDevice() {
  * ######################################################################### */
 
 void DW1000RangingClass::checkForReset() {
-	uint32_t curMillis = millis();
+	uint32_t curMillis = cookie_hal_get_millis();
 	if(!_sentAck && !_receivedAck) {
 		// check if inactive
 		if(curMillis-_lastActivity > _resetPeriod) {
@@ -348,7 +348,7 @@ int16_t DW1000RangingClass::detectMessageType(byte datas[]) {
 void DW1000RangingClass::loop() {
 	//we check if needed to reset !
 	checkForReset();
-	uint32_t time = millis(); // TODO other name - too close to "timer"
+	uint32_t time = cookie_hal_get_millis(); // TODO other name - too close to "timer"
 	if(time-timer > _timerDelay) {
 		timer = time;
 		timerTick();
@@ -818,7 +818,7 @@ void DW1000RangingClass::handleReceived() {
 
 void DW1000RangingClass::noteActivity() {
 	// update activity timestamp, so that we do not reach "resetPeriod"
-	_lastActivity = millis();
+	_lastActivity = cookie_hal_get_millis();
 }
 
 void DW1000RangingClass::resetInactive() {
@@ -907,7 +907,7 @@ void DW1000RangingClass::transmitRangingInit(DW1000Device* myDistantDevice) {
 	data[LONG_MAC_LEN] = RANGING_INIT;
 	data[LONG_MAC_LEN + 1] = _myBoardType;
 	copyShortAddress(_lastSentToShortAddress, myDistantDevice->getByteShortAddress());
-	delay(random(5, 25)); //This delay prevents colissions in responding to the blinks from the master. This way, library auto re-enables after master's reset.
+	//delay(random(5, 25)); //This delay prevents colissions in responding to the blinks from the master. This way, library auto re-enables after master's reset.
 	transmit(data);
 }
 

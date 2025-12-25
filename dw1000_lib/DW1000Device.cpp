@@ -92,12 +92,12 @@ float DW1000Device::getQuality() { return float(_quality)/100.0f; }
 
 
 void DW1000Device::randomShortAddress() {
-	_shortAddress[0] = random(0, 256);
-	_shortAddress[1] = random(0, 256);
+	_shortAddress[0] = uint8_t(cookie_hal_get_millis());
+	_shortAddress[1] = uint8_t(cookie_hal_get_millis() - 5);
 }
 
 void DW1000Device::noteActivity() {
-	_activity = millis();
+	_activity = cookie_hal_get_millis();
 }
 
 bool DW1000Device::isInactive() {
@@ -107,8 +107,8 @@ bool DW1000Device::isInactive() {
 		return false;
 	}
 
-	if(millis()-_activity > INACTIVITY_TIME) {
-		_activity = millis();
+	if(cookie_hal_get_millis()-_activity > INACTIVITY_TIME) {
+		_activity = cookie_hal_get_millis();
 		return true;
 	}
 	return false;

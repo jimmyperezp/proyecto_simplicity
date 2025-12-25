@@ -77,25 +77,56 @@
 // <<< sl:start pin_tool >>>
 // <usart signal=TX,RX,CLK,(CS)> SL_SPIDRV_DW1000
 // $[USART_SL_SPIDRV_DW1000]
-#warning "SPIDRV USART peripheral not configured"
-// #define SL_SPIDRV_DW1000_PERIPHERAL        USART0
-// #define SL_SPIDRV_DW1000_PERIPHERAL_NO     0
+#ifndef SL_SPIDRV_DW1000_PERIPHERAL             
+#define SL_SPIDRV_DW1000_PERIPHERAL              USART0
+#endif
+#ifndef SL_SPIDRV_DW1000_PERIPHERAL_NO          
+#define SL_SPIDRV_DW1000_PERIPHERAL_NO           0
+#endif
 
-// #define SL_SPIDRV_DW1000_TX_PORT           gpioPortA
-// #define SL_SPIDRV_DW1000_TX_PIN            0
-// #define SL_SPIDRV_DW1000_TX_LOC            0
+// USART0 TX on PA3
+#ifndef SL_SPIDRV_DW1000_TX_PORT                
+#define SL_SPIDRV_DW1000_TX_PORT                 gpioPortA
+#endif
+#ifndef SL_SPIDRV_DW1000_TX_PIN                 
+#define SL_SPIDRV_DW1000_TX_PIN                  3
+#endif
+#ifndef SL_SPIDRV_DW1000_TX_LOC                 
+#define SL_SPIDRV_DW1000_TX_LOC                  3
+#endif
 
-// #define SL_SPIDRV_DW1000_RX_PORT           gpioPortA
-// #define SL_SPIDRV_DW1000_RX_PIN            1
-// #define SL_SPIDRV_DW1000_RX_LOC            0
+// USART0 RX on PA4
+#ifndef SL_SPIDRV_DW1000_RX_PORT                
+#define SL_SPIDRV_DW1000_RX_PORT                 gpioPortA
+#endif
+#ifndef SL_SPIDRV_DW1000_RX_PIN                 
+#define SL_SPIDRV_DW1000_RX_PIN                  4
+#endif
+#ifndef SL_SPIDRV_DW1000_RX_LOC                 
+#define SL_SPIDRV_DW1000_RX_LOC                  3
+#endif
 
-// #define SL_SPIDRV_DW1000_CLK_PORT          gpioPortA
-// #define SL_SPIDRV_DW1000_CLK_PIN           2
-// #define SL_SPIDRV_DW1000_CLK_LOC           0
+// USART0 CLK on PA2
+#ifndef SL_SPIDRV_DW1000_CLK_PORT               
+#define SL_SPIDRV_DW1000_CLK_PORT                gpioPortA
+#endif
+#ifndef SL_SPIDRV_DW1000_CLK_PIN                
+#define SL_SPIDRV_DW1000_CLK_PIN                 2
+#endif
+#ifndef SL_SPIDRV_DW1000_CLK_LOC                
+#define SL_SPIDRV_DW1000_CLK_LOC                 0
+#endif
 
-// #define SL_SPIDRV_DW1000_CS_PORT           gpioPortA
-// #define SL_SPIDRV_DW1000_CS_PIN            3
-// #define SL_SPIDRV_DW1000_CS_LOC            0
+// USART0 CS on PB11
+#ifndef SL_SPIDRV_DW1000_CS_PORT                
+#define SL_SPIDRV_DW1000_CS_PORT                 gpioPortB
+#endif
+#ifndef SL_SPIDRV_DW1000_CS_PIN                 
+#define SL_SPIDRV_DW1000_CS_PIN                  11
+#endif
+#ifndef SL_SPIDRV_DW1000_CS_LOC                 
+#define SL_SPIDRV_DW1000_CS_LOC                  3
+#endif
 // [USART_SL_SPIDRV_DW1000]$
 // <<< sl:end pin_tool >>>
 
