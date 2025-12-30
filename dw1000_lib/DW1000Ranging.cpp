@@ -1070,19 +1070,19 @@ void DW1000RangingClass::transmitStopRanging(DW1000Device* device){
 
 	transmitInit();
 	byte dest[2];
-	bool sent_by_broadcast = false;
+
 
 	if(device==nullptr){
 		dest[0] = 0xFF;
 		dest[1] = 0xFF;
 
-		sent_by_broadcast = true;
+
 	}
 
 	else{
 
 		memcpy(dest,device->getByteShortAddress(),2); 
-		sent_by_broadcast = false;
+
 
 	}
 	_globalMac.generateShortMACFrame(data, _currentShortAddress, dest);
