@@ -2,6 +2,9 @@
 # ARCHIVOS QUE DEBEN IGNORARSE (GENERADOS)
 # -----------------------------------------
 
+.pdm 
+.settings 
+autogen/
 # Archivos del configurador de Simplicity Studio
 *.slcp
 *.slps
