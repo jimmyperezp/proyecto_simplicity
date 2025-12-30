@@ -74,7 +74,8 @@ const byte DW1000Class::BIAS_500_64[] = {110, 105, 100, 93, 82, 69, 51, 27, 0, 2
 const byte DW1000Class::BIAS_900_16[] = {137, 122, 105, 88, 69, 47, 25, 0, 21, 48, 79, 105, 127, 147, 160, 169, 178, 197};
 const byte DW1000Class::BIAS_900_64[] = {147, 133, 117, 99, 75, 50, 29, 0, 24, 45, 63, 76, 87, 98, 116, 122, 132, 142};
 */
-// SPI settings
+/*
+// Arduino's SPI settings
 #ifdef ESP8266
 	// default ESP8266 frequency is 80 Mhz, thus divide by 4 is 20 MHz
 	const SPISettings DW1000Class::_fastSPI = SPISettings(20000000L, MSBFIRST, SPI_MODE0);
@@ -84,12 +85,14 @@ const byte DW1000Class::BIAS_900_64[] = {147, 133, 117, 99, 75, 50, 29, 0, 24, 4
 const SPISettings DW1000Class::_slowSPI = SPISettings(2000000L, MSBFIRST, SPI_MODE0);
 const SPISettings* DW1000Class::_currentSPI = &_fastSPI;
 
+*/
+
 /* ###########################################################################
  * #### Init and end #######################################################
  * ######################################################################### */
 
 void DW1000Class::end() {
-	SPI.end();
+	//SPI.end();
 }
 
 void DW1000Class::select(uint8_t ss) {
@@ -201,15 +204,18 @@ void DW1000Class::enableClock(byte clock) {
 	memset(pmscctrl0, 0, LEN_PMSC_CTRL0);
 	readBytes(PMSC, PMSC_CTRL0_SUB, pmscctrl0, LEN_PMSC_CTRL0);
 	if(clock == AUTO_CLOCK) {
-		_currentSPI = &_fastSPI;
+		//_currentSPI = &_fastSPI;
+	  cookie_hal_spi_speed(true);
 		pmscctrl0[0] = AUTO_CLOCK;
 		pmscctrl0[1] &= 0xFE;
 	} else if(clock == XTI_CLOCK) {
-		_currentSPI = &_slowSPI;
+		//_currentSPI = &_slowSPI;
+	  cookie_hal_spi_speed(false);
 		pmscctrl0[0] &= 0xFC;
 		pmscctrl0[0] |= XTI_CLOCK;
 	} else if(clock == PLL_CLOCK) {
-		_currentSPI = &_fastSPI;
+		//_currentSPI = &_fastSPI;
+	  cookie_hal_spi_speed(true);
 		pmscctrl0[0] &= 0xFC;
 		pmscctrl0[0] |= PLL_CLOCK;
 	} else {
@@ -1669,7 +1675,7 @@ void DW1000Class::writeValueToBytes(byte data[], int32_t val, uint16_t n) {
 void DW1000Class::readBytes(byte cmd, uint16_t offset, byte data[], uint16_t n) {
 	byte header[3];
 	uint8_t headerLen = 1;
-	uint16_t i = 0;
+	//uint16_t i = 0;
 	
 	// build SPI header
 	if(offset == NO_SUB) {
@@ -1686,6 +1692,7 @@ void DW1000Class::readBytes(byte cmd, uint16_t offset, byte data[], uint16_t n) 
 		}
 	}
 
+	/* Arduino's spi method:
 	SPI.beginTransaction(*_currentSPI);
 	digitalWrite(_ss, LOW);
 	for(i = 0; i < headerLen; i++) {
@@ -1697,6 +1704,15 @@ void DW1000Class::readBytes(byte cmd, uint16_t offset, byte data[], uint16_t n) 
 	cookie_hal_delay_us(5);
 	digitalWrite(_ss, HIGH);
 	SPI.endTransaction();
+	*/
+
+	//Cookie's spi method:
+	cookie_hal_spi_select(true);
+	cookie_hal_spi_transfer(header,NULL,headerLen);
+	cookie_hal_spi_transfer(NULL, data, n);
+	cookie_hal_delay_us(5);
+	cookie_hal_spi_select(false);
+
 }
 
 // always 4 bytes
@@ -1742,7 +1758,7 @@ void DW1000Class::writeByte(byte cmd, uint16_t offset, byte data) {
 void DW1000Class::writeBytes(byte cmd, uint16_t offset, byte data[], uint16_t data_size) {
 	byte header[3];
 	uint8_t  headerLen = 1;
-	uint16_t  i = 0;
+	//uint16_t  i = 0;
 	
 	// TODO proper error handling: address out of bounds
 	// build SPI header
@@ -1759,17 +1775,35 @@ void DW1000Class::writeBytes(byte cmd, uint16_t offset, byte data[], uint16_t da
 			headerLen += 2;
 		}
 	}
-	SPI.beginTransaction(*_currentSPI);
-	digitalWrite(_ss, LOW);
+
+
+
+
+	/* Arduino's method:
+
+	//SPI.beginTransaction(*_currentSPI);
+  //digitalWrite(_ss, LOW);
+
 	for(i = 0; i < headerLen; i++) {
 		SPI.transfer(header[i]); // send header
 	}
 	for(i = 0; i < data_size; i++) {
 		SPI.transfer(data[i]); // write values
 	}
+
+
+
 	cookie_hal_delay_us(5);
 	digitalWrite(_ss, HIGH);
 	SPI.endTransaction();
+	*/
+  cookie_hal_spi_select(true);
+  cookie_hal_spi_transfer(header, NULL, headerLen);
+  cookie_hal_spi_transfer(NULL, data, data_size);
+  cookie_hal_delay_us(5);
+  cookie_hal_spi_select(false);
+
+
 }
 
 

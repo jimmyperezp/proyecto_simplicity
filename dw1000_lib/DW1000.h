@@ -521,11 +521,14 @@ public:
 	static const byte XTI_CLOCK  = 0x01;
 	static const byte PLL_CLOCK  = 0x02;
 	
-	/* SPI configs. */
-	static const SPISettings _fastSPI;
-	static const SPISettings _slowSPI;
-	static const SPISettings* _currentSPI;
 	
+	// Arduino's SPI Settings
+	//static const SPISettings _fastSPI;
+	//static const SPISettings _slowSPI;
+	//static const SPISettings* _currentSPI;
+
+
+
 	/* range bias tables (500/900 MHz band, 16/64 MHz PRF), -61 to -95 dBm. */
 	static const byte BIAS_500_16_ZERO = 10;
 	static const byte BIAS_500_64_ZERO = 8;
