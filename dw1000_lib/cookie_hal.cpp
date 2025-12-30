@@ -3,6 +3,8 @@
 #include "spidrv.h"
 #include "sl_udelay.h"
 
+extern SPIDRV_Handle_t sl_spidrv_dw1000_handle;
+
 void cookie_hal_init(void){
 
   CMU_ClockEnable(cmuClock_GPIO,true); //turns on the pin's clock to make them work.
@@ -33,6 +35,29 @@ void cookie_hal_spi_select(bool select){
   }
 }
 
+void cookie_hal_spi_speed(bool fast){
+  /*
+   * Fast = true --> SPI = 20MHz
+   * Fast = false --> SPI at 2 MHz */
+
+  uint32_t bitrate;
+  if (fast) {
+          bitrate = 16000000; // 16 MHz (Velocidad de crucero)
+      } else {
+          bitrate = 2000000;  // 2 MHz (Velocidad segura/inicialización)
+      }
+
+      // Función del GSDK para cambiar la velocidad al vuelo
+      SPIDRV_SetBitrate(sl_spidrv_dw1000_handle, bitrate);
+  }
+
+void cookie_hal_spi_transfer(uint8_t *buffer_tx, uint8_t *buffer_rx, uint16_t length) {
+    // if buffer_tx == NULL, sends zeros to read.
+    // if buffer_rx == NULL, ignores the receiving data.
+
+    SPIDRV_MTransferB(sl_spidrv_dw1000_handle, buffer_tx, buffer_rx, length);
+}
+
 void cookie_hal_delay_ms(uint32_t ms){
   sl_udelay_wait(ms*1000);
 }
@@ -45,6 +70,6 @@ void cookie_hal_delay_us(uint32_t us){
 uint32_t cookie_hal_get_millis(void) {
 
     //Converts sleeptimer ticks to milliseconds.
-    uint32_t tick_cnt = sl_sleeptimer_get_tick_count();
-    return sl_sleeptimer_tick_to_ms(tick_cnt);
+    uint32_t tick_count = sl_sleeptimer_get_tick_count();
+    return sl_sleeptimer_tick_to_ms(tick_count);
 }

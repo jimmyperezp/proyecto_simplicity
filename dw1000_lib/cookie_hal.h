@@ -22,12 +22,17 @@
 typedef uint8_t byte;
 typedef bool boolean;
 
+//Bit operations
+#ifndef bitRead
+  #define bitRead(value, bit) (((value) >> (bit)) & 0x01)
+  #define bitSet(value, bit)  ((value) |= (1UL << (bit)))
+  #define bitClear(value, bit) ((value) &= ~(1UL << (bit)))
+  #define bitWrite(value, bit, bitvalue) ((bitvalue) ? bitSet(value, bit) : bitClear(value, bit))
+#endif
 //Constants
 #define LOW 0
 #define HIGH 1
 
-#define INPUT 0
-#define OUTPUT 1
 
 // Cookie's Board pins & ports
 
@@ -50,12 +55,13 @@ typedef bool boolean;
 // Function declarations to initialize the chip
 void cookie_hal_init(void);
 
-//Chip select control (active on low-state)
+//SPI control
 void cookie_hal_spi_select(bool select);
+void cookie_hal_spi_transfer(uint8_t *buffer_tx, uint8_t *buffer_rx, uint16_t length);
+void cookie_hal_spi_speed(bool fast);
 
 //DW1000 Reset
 void cookie_hal_reset(bool active);
-
 
 
 //Delay methods (instead of 'Delay' from arduino)
