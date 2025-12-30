@@ -92,7 +92,7 @@ const SPISettings* DW1000Class::_currentSPI = &_fastSPI;
  * ######################################################################### */
 
 void DW1000Class::end() {
-	//SPI.end();
+
 }
 
 void DW1000Class::select(uint8_t ss) {
@@ -134,10 +134,7 @@ void DW1000Class::select(uint8_t ss) {
 
 void DW1000Class::reselect(uint8_t ss) {
 	_ss = ss;
-	/*
-	pinMode(_ss, OUTPUT);
-	digitalWrite(_ss, HIGH);
-	*/
+
 }
 
 void DW1000Class::begin(uint8_t irq, uint8_t rst) {
@@ -150,25 +147,6 @@ void DW1000Class::begin(uint8_t irq, uint8_t rst) {
 
 
 
-  /* PREVIOUS VERSION
-	// generous initial init/wake-up-idle delay
-	delay(5);
-	// Configure the IRQ pin as INPUT. Required for correct interrupt setting for ESP8266
-    	pinMode(irq, INPUT);
-	// start SPI
-	SPI.begin();
-//#ifndef ESP8266
-//	SPI.usingInterrupt(digitalPinToInterrupt(irq)); // not every board support this, e.g. ESP8266
-//#endif
-	// pin and basic member setup
-	_rst        = rst;
-	_irq        = irq;
-	_deviceMode = IDLE_MODE;
-	// attach interrupt
-	//attachInterrupt(_irq, DW1000Class::handleInterrupt, CHANGE); // todo interrupt for ESP8266
-	// TODO throw error if pin is not a interrupt pin
-	attachInterrupt(digitalPinToInterrupt(_irq), DW1000Class::handleInterrupt, RISING); // todo interrupt for ESP8266
-  */
 
 }
 
@@ -308,10 +286,9 @@ void DW1000Class::reset() {
 		softReset();
 	} else {
 		// dw1000 data sheet v2.08 §5.6.1 page 20, the RSTn pin should not be driven high but left floating.
-		//pinMode(_rst, OUTPUT);
-	  //digitalWrite(_rst, LOW);
+
 	    cookie_hal_delay_ms(2);  // dw1000 data sheet v2.08 §5.6.1 page 20: nominal 50ns, to be safe take more time
-		//pinMode(_rst, INPUT);
+
 	    cookie_hal_delay_ms(10); // dwm1000 data sheet v1.2 page 5: nominal 3 ms, to be safe take more time
 		// force into idle mode (although it should be already after reset)
 		idle();
@@ -1692,19 +1669,6 @@ void DW1000Class::readBytes(byte cmd, uint16_t offset, byte data[], uint16_t n) 
 		}
 	}
 
-	/* Arduino's spi method:
-	SPI.beginTransaction(*_currentSPI);
-	digitalWrite(_ss, LOW);
-	for(i = 0; i < headerLen; i++) {
-		SPI.transfer(header[i]); // send header
-	}
-	for(i = 0; i < n; i++) {
-		data[i] = SPI.transfer(JUNK); // read values
-	}
-	cookie_hal_delay_us(5);
-	digitalWrite(_ss, HIGH);
-	SPI.endTransaction();
-	*/
 
 	//Cookie's spi method:
 	cookie_hal_spi_select(true);
@@ -1777,26 +1741,6 @@ void DW1000Class::writeBytes(byte cmd, uint16_t offset, byte data[], uint16_t da
 	}
 
 
-
-
-	/* Arduino's method:
-
-	//SPI.beginTransaction(*_currentSPI);
-  //digitalWrite(_ss, LOW);
-
-	for(i = 0; i < headerLen; i++) {
-		SPI.transfer(header[i]); // send header
-	}
-	for(i = 0; i < data_size; i++) {
-		SPI.transfer(data[i]); // write values
-	}
-
-
-
-	cookie_hal_delay_us(5);
-	digitalWrite(_ss, HIGH);
-	SPI.endTransaction();
-	*/
   cookie_hal_spi_select(true);
   cookie_hal_spi_transfer(header, NULL, headerLen);
   cookie_hal_spi_transfer(NULL, data, data_size);
