@@ -26,11 +26,24 @@
 #include "sl_system_process_action.h"
 #endif // SL_CATALOG_KERNEL_PRESENT
 
+#include "em_device.h"
+#include "em_chip.h"
+#include "em_cmu.h"
+
 int main(void)
 {
+  CHIP_Init();
+  CMU_OscillatorEnable(cmuOsc_LFRCO, true, true);
+
+    // 2. Conectamos los relojes del sistema a este oscilador
+    CMU_ClockSelectSet(cmuClock_LFA, cmuSelect_LFRCO);
+    CMU_ClockSelectSet(cmuClock_LFB, cmuSelect_LFRCO);
+    CMU_ClockSelectSet(cmuClock_LFE, cmuSelect_LFRCO);
   // Initialize Silicon Labs device, system, service(s) and protocol stack(s).
   // Note that if the kernel is present, processing task(s) will be created by
   // this call.
+    CMU_ClockEnable(cmuClock_GPIO, true);
+
   sl_system_init();
 
   // Initialize the application. For example, create periodic timer(s) or

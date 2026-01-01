@@ -738,6 +738,7 @@ void DW1000Class::handleInterrupt() {
 
 void DW1000Class::getPrintableDeviceIdentifier(char msgBuffer[]) {
 	byte data[LEN_DEV_ID];
+	memset(data,0xFF,LEN_DEV_ID);
 	readBytes(DEV_ID, NO_SUB, data, LEN_DEV_ID);
 	sprintf(msgBuffer, "%02X - model: %d, version: %d, revision: %d",
 					(uint16_t)((data[3] << 8) | data[2]), data[1], (data[0] >> 4) & 0x0F, data[0] & 0x0F);

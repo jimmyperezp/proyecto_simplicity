@@ -9,8 +9,13 @@
     <property object="PORTIO" propertyId="portio.usart0.location.cs" value="3"/>
     <property object="PORTIO" propertyId="portio.usart0.location.rx" value="3"/>
     <property object="PORTIO" propertyId="portio.usart0.location.tx" value="3"/>
+    <property object="PORTIO" propertyId="portio.usart1.enable.rx" value="Enabled"/>
+    <property object="PORTIO" propertyId="portio.usart1.enable.tx" value="Enabled"/>
+    <property object="PORTIO" propertyId="portio.usart1.location.tx" value="5"/>
     <property object="USART0" propertyId="ABModule.selectedRequirement" value="usart%T%SL_SPIDRV_DW1000%T%sl_spidrv_dw1000_config.h"/>
     <property object="USART0" propertyId="ABPeripheral.included" value="true"/>
+    <property object="USART1" propertyId="ABModule.selectedRequirement" value="usart%T%SL_IOSTREAM_USART_VCOM%T%sl_iostream_usart_vcom_config.h"/>
+    <property object="USART1" propertyId="ABPeripheral.included" value="true"/>
   </mode>
   <modeTransition>
     <property object="RESET &#x2192; DefaultMode" propertyId="modeTransition.source" value="RESET"/>

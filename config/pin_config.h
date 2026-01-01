@@ -151,6 +151,28 @@
 // [USART0]$
 
 // $[USART1]
+// USART1 RX on PA1
+#ifndef USART1_RX_PORT                          
+#define USART1_RX_PORT                           gpioPortA
+#endif
+#ifndef USART1_RX_PIN                           
+#define USART1_RX_PIN                            1
+#endif
+#ifndef USART1_RX_LOC                           
+#define USART1_RX_LOC                            0
+#endif
+
+// USART1 TX on PA5
+#ifndef USART1_TX_PORT                          
+#define USART1_TX_PORT                           gpioPortA
+#endif
+#ifndef USART1_TX_PIN                           
+#define USART1_TX_PIN                            5
+#endif
+#ifndef USART1_TX_LOC                           
+#define USART1_TX_LOC                            5
+#endif
+
 // [USART1]$
 
 // $[USART2]

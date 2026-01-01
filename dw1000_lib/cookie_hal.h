@@ -50,7 +50,10 @@ typedef bool boolean;
 
 // Wakeup --> D24 Cookie --> PI1 EFR32
 #define DW_WAKE_PORT gpioPortI
-#define DW_WAKE_PIN 11
+#define DW_WAKE_PIN 1
+
+#define DW_EXTON_PORT gpioPortC
+#define DW_EXTON_PIN 8
 
 // Function declarations to initialize the chip
 void cookie_hal_init(void);
