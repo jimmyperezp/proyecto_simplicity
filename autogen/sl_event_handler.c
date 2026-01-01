@@ -7,6 +7,7 @@
 #include "sl_device_init_clocks.h"
 #include "sl_device_init_emu.h"
 #include "sl_sleeptimer.h"
+#include "gpiointerrupt.h"
 #include "sl_iostream_init_usart_instances.h"
 #include "sl_spidrv_instances.h"
 #include "sl_iostream_init_instances.h"
@@ -25,6 +26,7 @@ void sl_platform_init(void)
 
 void sl_driver_init(void)
 {
+  GPIOINT_Init();
   sl_spidrv_init_instances();
 }
 

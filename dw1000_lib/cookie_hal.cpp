@@ -1,7 +1,4 @@
 #include "cookie_hal.h"
-#include "em_gpio.h"
-#include "spidrv.h"
-#include "sl_udelay.h"
 
 extern SPIDRV_Handle_t sl_spidrv_dw1000_handle;
 

@@ -16,6 +16,12 @@
 #include <cstring>
 #include <math.h>
 
+//Gecko's includes:
+
+#include "gpiointerrupt.h"
+#include "em_gpio.h"
+#include "spidrv.h"
+#include "sl_udelay.h"
 
 //Type definitions to use with the gecko SDK
 
